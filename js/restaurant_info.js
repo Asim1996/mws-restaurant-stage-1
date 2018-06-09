@@ -14,10 +14,15 @@ window.initMap = () => {
         center: restaurant.latlng,
         scrollwheel: false
       });
+      // Iframe should have a title
+      google.maps.event.addListener (self.map, 'idle', () => {
+        document.querySelector('iframe').title = "Google Maps";
+      });
       fillBreadcrumb();
       DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
     }
   });
+
 }
 
 /**
@@ -54,11 +59,11 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
-
+  
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img'
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
-
+  
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
 
@@ -75,6 +80,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
  */
 fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
   const hours = document.getElementById('restaurant-hours');
+
   for (let key in operatingHours) {
     const row = document.createElement('tr');
 

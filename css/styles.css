@@ -275,7 +275,7 @@ nav h1 a {
 }
 #reviews-list li {
   background-color: #fff;
-    border: 2px solid #f3f3f3;
+  border: 2px solid #f3f3f3;
   display: block;
   list-style-type: none;
   margin: 0 0 30px;
@@ -292,8 +292,39 @@ nav h1 a {
   color: #666;
 }
 
+/*Skip link for Accessibility*/
 
-
+.skip-link {
+  position: absolute;
+  top:-40px;
+  left:0;
+  background: #BF1722;
+  color: #fff;
+  padding: 8px;
+  z-index:100;
+}
+.skip-link:focus {
+  top:0;
+}
+/*Making label accessible*/
+.visuallyhidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+}
 /*========Media Queries============== */
 @media screen and (min-width:450px){
   .filter-options{

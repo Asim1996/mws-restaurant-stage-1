@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <meta charset="utf-8">
@@ -12,8 +12,13 @@
 </head>
 
 <body class="inside">
+
   <!-- Beginning header -->
   <header>
+
+  <!-- For people with motor impairment --> 
+  <a href="#restaurant-container" class="skip-link" >Skip to main content</a>
+
     <!-- Beginning nav -->
     <nav>
       <h1><a href="/">Restaurant Reviews</a></h1>
@@ -31,20 +36,20 @@
   <main id="maincontent">
     <!-- Beginning map -->
     <section id="map-container">
-      <div id="map"></div>
+      <div id="map" tabindex="0" role="application" aria-label="Restaurant location on map"></div>
     </section>
     <!-- End map -->
     <!-- Beginning restaurant -->
-    <section id="restaurant-container">
+    <section id="restaurant-container" tabindex="0">
       <h1 id="restaurant-name"></h1>
-      <img id="restaurant-img">
+      <img id="restaurant-img"  alt="Restaurant photograph">
       <p id="restaurant-cuisine"></p>
-      <p id="restaurant-address"></p>
+      <p id="restaurant-address" ></p>
       <table id="restaurant-hours"></table>
     </section>
     <!-- end restaurant -->
     <!-- Beginning reviews -->
-    <section id="reviews-container">
+    <section id="reviews-container" tabindex="0">
       <ul id="reviews-list"></ul>
     </section>
     <!-- End reviews -->

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <meta charset="utf-8">
@@ -12,6 +12,8 @@
 
 <body>
   <header>
+    <!-- For people with motor impairment -->
+    <a href="#applyFilter" class="skip-link">Skip to main content</a>
     <nav>
       <h1><a href="/">Restaurant Reviews</a></h1>
     </nav>
@@ -19,14 +21,18 @@
 
   <main id="maincontent">
     <section id="map-container">
-      <div id="map"></div>
+      <div id="map" tabindex="0" role="application"  aria-label="Map with restaurants"></div>
     </section>
-    <section>
+    <section id="applyFilter">
       <div class="filter-options">
-        <h2>Filter Results</h2>
+        <h2 tabindex="0">Filter Results</h2>
+        <!-- Labeling Input Element -->
+        <label for="neighborhoods-select" class="visuallyhidden">Filter By Neighborhoods</label>
         <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
           <option value="all">All Neighborhoods</option>
         </select>
+        <!-- Labeling Input Element -->
+        <label for="cuisines-select" class="visuallyhidden">Filter By Cuisines</label>
         <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
           <option value="all">All Cuisines</option>
         </select>

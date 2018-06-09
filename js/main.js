@@ -75,10 +75,16 @@ window.initMap = () => {
     lat: 40.722216,
     lng: -73.987501
   };
+
   self.map = new google.maps.Map(document.getElementById('map'), {
     zoom: 12,
     center: loc,
-    scrollwheel: false
+    scrollwheel: false,
+
+  });
+  // Iframe should have a title
+  google.maps.event.addListener (self.map, 'idle', () => {
+    document.querySelector('iframe').title = "Google Maps";
   });
   updateRestaurants();
 }
@@ -137,10 +143,12 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
  */
 createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
-
+  // For getting focus
+  li.setAttribute('tabindex',"0");
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.alt=`${restaurant.name} restaurant photograph`;
   li.append(image);
 
   const name = document.createElement('h1');
@@ -149,15 +157,18 @@ createRestaurantHTML = (restaurant) => {
 
   const neighborhood = document.createElement('p');
   neighborhood.innerHTML = restaurant.neighborhood;
+  neighborhood.setAttribute('aria-label',`${restaurant.neighborhood}` );
   li.append(neighborhood);
 
   const address = document.createElement('p');
   address.innerHTML = restaurant.address;
+  address.setAttribute('aria-label',`Address ${restaurant.address}`);
   li.append(address);
 
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
   more.href = DBHelper.urlForRestaurant(restaurant);
+  more.setAttribute('aria-label',`More details of ${restaurant.name}`);
   li.append(more)
 
   return li
@@ -176,3 +187,4 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     self.markers.push(marker);
   });
 }
+
