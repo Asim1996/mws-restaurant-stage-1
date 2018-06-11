@@ -158,11 +158,27 @@ createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
   // For getting focus
   li.setAttribute('tabindex',"0");
+  /*Picture element for getting appropriate image*/
+  const picture = document.createElement('picture');
+  
+  const source = document.createElement('source');
+  /*Browser that support webp will use the appropriate image based on width*/
+  source.srcset=`/img/${restaurant.id}.webp 800w, /img/${restaurant.id}-600.webp 600w, /img/${restaurant.id}-400.webp 400w`;
+  
+  source.type="image/webp";
+  
   const image = document.createElement('img');
   image.className = 'restaurant-img';
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
+ 
+  /*Browser that does not support webp will use the appropriate jpeg image based on width*/
+  image.srcset = `/img/${restaurant.id}.jpg 800w, /img/${restaurant.id}-600.jpg 600w, /img/${restaurant.id}-400.jpg 400w`;
+  
   image.alt=`${restaurant.name} restaurant photograph`;
-  li.append(image);
+    
+  picture.append(source);
+  picture.append(image);
+  li.append(picture);
 
   const name = document.createElement('h1');
   name.innerHTML = restaurant.name;
