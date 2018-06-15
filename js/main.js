@@ -177,7 +177,8 @@ createRestaurantHTML = (restaurant) => {
   picture.append(image);
   li.append(picture);
 
-  const name = document.createElement('h1');
+  /*Making the page Semantically correct*/
+  const name = document.createElement('h2');
   name.innerHTML = restaurant.name;
   li.append(name);
   
@@ -200,9 +201,7 @@ createRestaurantHTML = (restaurant) => {
   return li
 }
 
-/**
- * Add markers for current restaurants to the map.
- */
+/** Add markers for current restaurants to the map.*/
 addMarkersToMap = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
     // Add marker to the map

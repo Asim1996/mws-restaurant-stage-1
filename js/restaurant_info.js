@@ -1,6 +1,19 @@
 let restaurant;
 var newMap;
 
+/*Service Worker Registration */
+if (navigator.serviceWorker) {
+  navigator.serviceWorker
+    .register("./sw.js")
+    .then(function(){
+      console.log("Registration worked!");
+    })
+    .catch(function(){
+      console.log("Registration Failed!");
+    });
+}
+
+
 /**
  * Initialize map as soon as the page is loaded.
  */
@@ -120,7 +133,9 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
  */
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
-  const title = document.createElement('h2');
+  
+  /*For semantically correct code*/
+  const title = document.createElement('h3');
   title.innerHTML = 'Reviews';
   container.appendChild(title);
 
@@ -149,10 +164,25 @@ createReviewHTML = (review) => {
   const date = document.createElement('p');
   date.innerHTML = review.date;
   li.appendChild(date);
+  
+  /*Star icons to make UI more interactive*/
 
-  const rating = document.createElement('p');
-  rating.innerHTML = `Rating: ${review.rating}`;
+  const rating = document.createElement('span');
+  rating.className=`star-${review.rating}`;
+ 
+  /*Hidding from users with accessibilty issues*/
+  rating.setAttribute('aria-hidden',"true");
+  rating.setAttribute('title',"User Rating");
+  
+  /*For screen reader use */
+  const srspan=document.createElement('span');
+  /*To visually hide the element from all user */
+  /*But made accessible to screen readers*/
+  srspan.className='visuallyhidden';
+  srspan.innerHTML=`Rating ${review.rating}`;
+
   li.appendChild(rating);
+  li.appendChild(srspan);
 
   const comments = document.createElement('p');
   comments.innerHTML = review.comments;

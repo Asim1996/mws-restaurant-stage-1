@@ -169,7 +169,7 @@ nav h1 a {
   min-width: 100%;
 }
 
-#restaurants-list li h1 {
+#restaurants-list li h2 {
   color: #e17900;
   font-family: Arial,sans-serif;
   font-size: 14pt;
@@ -272,7 +272,7 @@ nav h1 a {
 #reviews-container {
   padding: 30px 40px 40px;
 }
-#reviews-container h2 {
+#reviews-container h3 {
   color: #e17900;
   font-size: 24pt;
   font-weight: 600;
@@ -306,6 +306,51 @@ nav h1 a {
 
 #restaurant-hours td {
   color: #666;
+}
+
+/* Star unicode */
+span[class^=star-]:after{font-size:20pt;} 
+.star-1:after{content:"\2605\2606\2606\2606\2606";}
+.star-2:after{content:"\2605\2605\2606\2606\2606";}
+.star-3:after{content:"\2605\2605\2605\2606\2606";}
+.star-4:after{content:"\2605\2605\2605\2605\2606";}
+.star-5:after{content:"\2605\2605\2605\2605\2605";}
+
+span[class^=star-]{
+  color: #f4c150;
+}
+
+/* For screen readers */
+.visuallyhidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+}
+
+/* Quotes unicode for better UI */
+#reviews-list li::after{
+    content:"\201D";
+    position: absolute;
+    top: -2.1rem;
+    right: -0.6rem;
+    font-size: 18rem;
+    line-height: 1;
+    color:#f3f3f3;
+    font-family: sans-serif;
+    z-index: 1;
 }
 
 /*Skip link for Accessibility*/
