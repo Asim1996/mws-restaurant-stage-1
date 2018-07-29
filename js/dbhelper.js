@@ -1,6 +1,7 @@
 /**
  * Common database helper functions.
  */
+ 
 class DBHelper {
 
     /*
@@ -11,24 +12,76 @@ class DBHelper {
     return `http://localhost:${port}/restaurants`;
   }
 
-
+  /*
+    Initialising Database  
+  */
+  static openDatabase(data){
+    // If browser does not support idb return
+    if (!('indexedDB' in window)) {
+    console.log('This browser doesn\'t support IndexedDB');
+    return;
+    }
+    return idb.open('restaurant-db', 1, function(upgradeDB){
+      var restaurantstore=upgradeDB.createObjectStore('restaurant',{
+      keyPath:'id',
+      autoIncrement:true
+      });
+  });
+  };
+ 
+  /*
+    Update data in DB 
+  */
+  static updateDB(data,dbpromise){
+  return dbpromise.then(function(db){
+  var tx=db.transaction('restaurant','readwrite');
+  var restaurantstore=tx.objectStore('restaurant');
+   data.forEach(function(item) {
+      restaurantstore.put(item);
+      tx.complete;
+    });
+    });   
+  }  
+  
+  /*
+    Get Restaurants from db for offline use
+  */
+static fetchfromDb(data) {
+    return data.then(function(db) {
+      if (!db) return;
+      let tx = db.transaction('restaurant');
+      let restaurantstore = tx.objectStore('restaurant');
+      return restaurantstore.getAll();
+    });
+  }
+  
   /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    fetch(DBHelper.DATABASE_URL)
-    .then((response) =>{
-      if(!response.ok){
-        throw response.statusText;
-      }
-      return response.json();
-    }).then((data) =>{
-        const restaurants = data;
-        callback(null, restaurants);
-    }).catch((error) => {
-        callback(error, null); 
-    })
-  }
+    const dbpromise = DBHelper.openDatabase();
+    // For offline check
+    DBHelper.fetchfromDb(dbpromise)
+      .then((restaurants) => {
+        if (restaurants.length>0) {
+          callback(null, restaurants);
+        }else {
+          // Fetching from development server
+          fetch(DBHelper.DATABASE_URL)
+          .then((response) =>{
+            if(!response.ok){
+            throw response.statusText;
+            }
+          return response.json();
+          }).then((restaurants) =>{
+            DBHelper.updateDB(restaurants,dbpromise);
+            callback(null, restaurants);
+          }).catch((error) => {
+          callback(error, null); 
+        });
+    }
+  });
+ }     
     
   /**
    * Fetch a restaurant by its ID.
