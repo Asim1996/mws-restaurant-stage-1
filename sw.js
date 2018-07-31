@@ -12,10 +12,10 @@ self.addEventListener('install',function(event){
 				'index.html',
 				'restaurant.html',
 				'js/idb.js',
-        'js/main.js',
-				'js/restaurant_info.js',
-				'js/dbhelper.js',
-				'css/styles.css',
+        'js/main.min.js',
+				'js/restaurant_info.min.js',
+				'js/dbhelper.min.js',
+				'css/styles.min.css',
 				]);
 			})
 		);
