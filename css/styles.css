@@ -348,6 +348,22 @@ span[class^=star-]{
 .skip-link:focus {
   top:0;
 }
+.heart{
+   border: none;
+   background-color: white;
+}
+.heart:before {
+  content: '\2764';
+  color: #595959;
+  font-size: 2rem;
+  cursor: pointer;
+  display: block;
+  border: none;
+}
+
+.favorite-checked:before {
+  color: #D75A4A;
+}
 
 /*========Media Queries(Mobile First approach)============== */
 @media screen and (min-width:450px){

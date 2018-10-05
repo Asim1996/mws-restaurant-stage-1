@@ -11,7 +11,9 @@ class DBHelper {
     const port = 1337 // Change this to your server port
     return `http://localhost:${port}/restaurants`;
   }
-
+  static get dbPromise() {
+    return DBHelper.openDatabase();
+  }
   /*
     Initialising Database  
   */
@@ -204,6 +206,35 @@ static fetchfromDb(data) {
   static imageUrlForRestaurant(restaurant) {
     return (`/img/${restaurant.photograph}`);
   }
+
+    static FavouriteRestaurantNetwork({ id, is_favorite }) {
+    fetch(`${this.DATABASE_URL}/${id}/?is_favorite=${!is_favorite}`,
+      {
+        method: 'PUT',
+      }
+    ).then(response => response.json())
+     .then(data => console.log(data));
+  }
+
+  static handleFavoriteClick(db, restaurant) {
+    let tx, store;
+    tx = db.transaction('restaurant', 'readwrite');
+    store = tx.objectStore('restaurant');
+    restaurant.is_favorite = !restaurant.is_favorite;
+    store.put(restaurant);
+    return tx.complete;
+  }
+
+  static markFavorite(restaurant) {
+    if ('indexedDB' in window) {
+      this.dbPromise.then(db => {
+        if (db) {
+           this.handleFavoriteClick(db, restaurant);
+        }
+      });
+    }
+     this.FavouriteRestaurantNetwork(restaurant);
+  }; 
 
   /**
    * Map marker for a restaurant.
