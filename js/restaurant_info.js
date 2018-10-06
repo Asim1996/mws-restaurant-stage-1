@@ -80,6 +80,29 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
 
+  var isFavorite = (restaurant["is_favorite"] && restaurant["is_favorite"].toString() === "true") ? true : false;
+  const favorite = document.createElement("button");
+  favorite.setAttribute('role', 'switch');
+  favorite.id=`${restaurant.id}`;
+  favorite.classList.add('heart');
+  if (isFavorite){
+    favorite.classList.add('favorite-checked');
+    favorite.setAttribute('aria-label',`${restaurant.name} is a favorite restaurant`);
+  }else{
+      favorite.setAttribute('aria-label',`${restaurant.name} is not a favorite restaurant`);
+  } 
+  favorite.onclick = (e) => {
+    DBHelper.markFavorite(restaurant);
+    favorite.classList.toggle('favorite-checked');
+    isFavorite=!isFavorite;
+    if (isFavorite){
+    favorite.setAttribute('aria-label',`${restaurant.name} is a favorite restaurant`);
+  }else{
+      favorite.setAttribute('aria-label',`${restaurant.name} is not a favorite restaurant`);
+  }
+  };
+   name.append(favorite);
+
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
   

@@ -350,7 +350,7 @@ span[class^=star-]{
 }
 .heart{
    border: none;
-   background-color: white;
+   background-color: inherit;
 }
 .heart:before {
   content: '\2764';
