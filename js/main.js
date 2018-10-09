@@ -190,8 +190,11 @@ createRestaurantHTML = (restaurant) => {
   if (isFavorite){
     favorite.classList.add('favorite-checked');
     favorite.setAttribute('aria-label',`${restaurant.name} is a favorite restaurant`);
+    favorite.setAttribute('title',`Mark as not favorite`);
+  
   }else{
       favorite.setAttribute('aria-label',`${restaurant.name} is not a favorite restaurant`);
+      favorite.setAttribute('title',`Mark as favorite`);
   } 
   favorite.onclick = (e) => {
     DBHelper.markFavorite(restaurant);
@@ -199,8 +202,10 @@ createRestaurantHTML = (restaurant) => {
     isFavorite=!isFavorite;
     if (isFavorite){
     favorite.setAttribute('aria-label',`${restaurant.name} is a favorite restaurant`);
+      favorite.setAttribute('title',`Mark as not favorite`);
   }else{
       favorite.setAttribute('aria-label',`${restaurant.name} is not a favorite restaurant`);
+      favorite.setAttribute('title',`Mark as favorite`);
   }
   };
   name.append(favorite);

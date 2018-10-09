@@ -1,6 +1,6 @@
 let restaurant;
 var newMap;
-
+let review;
 /*Service Worker Registration */
 if (navigator.serviceWorker) {
   navigator.serviceWorker
@@ -70,9 +70,9 @@ fetchRestaurantFromURL = (callback) => {
       fillRestaurantHTML();
       callback(null, restaurant)
     });
+   
   }
 }
-
 /**
  * Create restaurant HTML and add it to the webpage
  */
@@ -88,8 +88,10 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   if (isFavorite){
     favorite.classList.add('favorite-checked');
     favorite.setAttribute('aria-label',`${restaurant.name} is a favorite restaurant`);
+    favorite.setAttribute('title',`Mark as not favorite`);
   }else{
       favorite.setAttribute('aria-label',`${restaurant.name} is not a favorite restaurant`);
+       favorite.setAttribute('title',`Mark as favorite`);
   } 
   favorite.onclick = (e) => {
     DBHelper.markFavorite(restaurant);
@@ -97,8 +99,11 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
     isFavorite=!isFavorite;
     if (isFavorite){
     favorite.setAttribute('aria-label',`${restaurant.name} is a favorite restaurant`);
+    favorite.setAttribute('title',`Mark as not favorite`);
   }else{
       favorite.setAttribute('aria-label',`${restaurant.name} is not a favorite restaurant`);
+        favorite.setAttribute('title',`Mark as favorite`);
+  
   }
   };
    name.append(favorite);
@@ -150,31 +155,30 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
     hours.appendChild(row);
   }
 }
-
-/**
+ /**
  * Create all reviews HTML and add them to the webpage.
  */
-fillReviewsHTML = (reviews = self.restaurant.reviews) => {
+const fillReviewsHTML = () => {
   const container = document.getElementById('reviews-container');
-  
   /*For semantically correct code*/
   const title = document.createElement('h3');
   title.innerHTML = 'Reviews';
-  container.appendChild(title);
-
-  if (!reviews) {
-    const noReviews = document.createElement('p');
-    noReviews.innerHTML = 'No reviews yet!';
-    container.appendChild(noReviews);
-    return;
-  }
-  const ul = document.getElementById('reviews-list');
-  reviews.forEach(review => {
-    ul.appendChild(createReviewHTML(review));
-  });
-  container.appendChild(ul);
+  container.insertAdjacentElement('afterbegin', title);
+  const restaurantId = self.restaurant.id;
+  DBHelper.fetchRestaurantReviewsById(restaurantId)
+    .then(reviews => {
+      if (!reviews) {
+        const noReview = document.createElement('p');
+        noReview.innerHTML = 'No reviews yet!';
+        container.insertAfter(noReview, title);
+        return;
+      }
+      const ul = document.getElementById('reviews-list');
+      reviews.forEach(review => {
+        ul.appendChild(createReviewHTML(review));
+      });
+    })
 }
-
 /**
  * Create review HTML and add it to the webpage.
  */
@@ -185,7 +189,7 @@ createReviewHTML = (review) => {
     li.appendChild(name);
 
   const date = document.createElement('p');
-  date.innerHTML = review.date;
+  date.innerHTML = new Date(review.createdAt).toDateString();
   li.appendChild(date);
   
   /*Star icons to make UI more interactive*/

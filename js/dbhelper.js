@@ -7,13 +7,17 @@ class DBHelper {
     /*
       Development Sever
     */
-    static get DATABASE_URL() {
+  static get DATABASE_URL() {
     const port = 1337 // Change this to your server port
     return `http://localhost:${port}/restaurants`;
   }
-  static get dbPromise() {
-    return DBHelper.openDatabase();
+
+  static get REVIEWS_URL(){
+    const port = 1337 
+    return `http://localhost:${port}/reviews`; 
   }
+
+ 
   /*
     Initialising Database  
   */
@@ -23,12 +27,17 @@ class DBHelper {
     console.log('This browser doesn\'t support IndexedDB');
     return;
     }
-    return idb.open('restaurant-db', 1, function(upgradeDB){
+    return idb.open('restaurant-db', 2, function(upgradeDB){
+      switch (upgradeDB.oldVersion) {
+      case 0:
       var restaurantstore=upgradeDB.createObjectStore('restaurant',{
       keyPath:'id',
       autoIncrement:true
       });
-  });
+      case 1:
+      var reviewstore=upgradeDB.createObjectStore('reviews');
+      }
+      });
   };
  
   /*
@@ -44,7 +53,6 @@ class DBHelper {
     });
     });   
   }  
-  
   /*
     Get Restaurants from db for offline use
   */
@@ -56,7 +64,8 @@ static fetchfromDb(data) {
       return restaurantstore.getAll();
     });
   }
-  
+
+   
   /**
    * Fetch all restaurants.
    */
@@ -84,7 +93,7 @@ static fetchfromDb(data) {
     }
   });
  }     
-    
+ 
   /**
    * Fetch a restaurant by its ID.
    */
@@ -103,7 +112,77 @@ static fetchfromDb(data) {
       }
     });
   }
+  /**
+   * Fetch reviews by restaurant ID 
+   */
+  static getReviewsFromDb(dbPromise, restaurantId) {
+    return dbPromise.then((db) => {
+      if (!db) return;
+      let tx = db.transaction('reviews');
+      let reviewsStore = tx.objectStore('reviews');
+      return reviewsStore.get(restaurantId);
+    });
+  }
 
+  /**
+   * Update reviews in reviews db.
+   */
+  static updateReviewsInDb(dbPromise, restaurantId, reviews) {
+    return dbPromise.then((db) => {
+      if (!db) return;
+      let tx = db.transaction('reviews', 'readwrite');
+      let reviewsStore = tx.objectStore('reviews');
+      reviewsStore.put(reviews, restaurantId);
+      tx.complete;
+    });
+  }
+
+  /**
+   * Fetch all reviews for a particular restaurant.
+   */
+  static fetchRestaurantReviewsById(restaurantId) {
+    const reviewsUrl = `${this.REVIEWS_URL}/?restaurant_id=${restaurantId}`;
+    const dbPromise = DBHelper.openDatabase();
+
+    if (navigator.onLine) {
+      // Network then cache
+      return fetch(reviewsUrl)
+        .then(response => response.json())
+        .then(reviews => {
+          if (!reviews) throw new Error('Reviews not found');
+          // Update Reviews in DB by Restaurant
+          DBHelper.updateReviewsInDb(dbPromise, restaurantId, reviews);
+          return reviews;
+        }).catch(e => {
+          return DBHelper.getReviewsFromDb(dbPromise, restaurantId)
+            .then(reviews => {
+              if (reviews && reviews.length > 0) {
+                return reviews;
+              };
+            });
+        });
+    } else {
+      // Cache then network strategy
+      return DBHelper.getReviewsFromDb(dbPromise, restaurantId)
+        .then(reviews => {
+          if (reviews && reviews.length > 0) {
+            return reviews;
+          } else {
+            // Fetch reviews from network.
+            return fetch(reviewsUrl)
+              .then(response => response.json())
+              .then(reviews => {
+                if (!reviews) return;
+                DBHelper.updateReviewsInDb(dbPromise, restaurantId, reviews);
+                return reviews;
+              });
+          }
+        }).catch((error) => {
+          console.log(`Request failed with error: ${error}`);
+        });
+    }
+
+  }
   /**
    * Fetch restaurants by a cuisine type with proper error handling.
    */
@@ -226,8 +305,9 @@ static fetchfromDb(data) {
   }
 
   static markFavorite(restaurant) {
+    const dbPromise = DBHelper.openDatabase();
     if ('indexedDB' in window) {
-      this.dbPromise.then(db => {
+      dbPromise.then(db => {
         if (db) {
            this.handleFavoriteClick(db, restaurant);
         }
@@ -249,16 +329,5 @@ static fetchfromDb(data) {
       marker.addTo(newMap);
     return marker;
   } 
-  /* static mapMarkerForRestaurant(restaurant, map) {
-    const marker = new google.maps.Marker({
-      position: restaurant.latlng,
-      title: restaurant.name,
-      url: DBHelper.urlForRestaurant(restaurant),
-      map: map,
-      animation: google.maps.Animation.DROP}
-    );
-    return marker;
-  } */
-
 }
 
