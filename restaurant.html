@@ -61,6 +61,15 @@
     <!-- Beginning reviews -->
     <section id="reviews-container" tabindex="0">
       <ul id="reviews-list"></ul>
+      <button id="add-review" onclick="toggleForm()">&#128393; Add a Review</button>
+        <section id="review-form">
+        <form>
+            <input class="name" name="name" aria-label="Enter your name" type="text"placeholder="Enter your name">
+            <input class="rating" name="rating" min="1" max="5" aria-label="Enter restaurant rating" type="number" placeholder="Enter Rating">
+          <textarea class="comment" name="comments" aria-label="Enter your comments">Enter Comments</textarea>
+          <button type="button" name="submit" class="submit-review"> Submit Review </button>
+      </form>
+    </section>
     </section>
     <!-- End reviews -->
   </main>

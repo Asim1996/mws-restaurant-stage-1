@@ -228,6 +228,20 @@ fillBreadcrumb = (restaurant=self.restaurant) => {
   breadcrumb.appendChild(li);
 }
 
+/* Toggle form
+*/
+function toggleForm() {
+  var form=document.getElementById("review-form");
+  var button=document.getElementById("add-review") 
+  if (form.style.display == 'none'|| form.style.display == '') {
+    form.style.display = 'block';
+    button.style.marginBottom='1rem';
+  } else {
+    form.style.display = 'none';
+    button.style.marginBottom='5rem';
+  }
+}
+
 /**
  * Get a parameter by name from page URL.
  */

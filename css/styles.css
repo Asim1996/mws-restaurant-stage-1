@@ -385,11 +385,65 @@ span[class^=star-]{
   color: #D75A4A;
 }
 
+#add-review{
+  border: none;
+  background-color:#e17900;
+  color: white;
+  padding: 10px;
+  width: 90%;
+  left:0;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-size: 1.5em;
+  letter-spacing: 1.4px;
+  margin-bottom: 5rem; 
+}
+#review-form{
+  display: none;
+  height: 250px;
+}
+form{
+  width: 90%;
+}
+input {
+    width: -webkit-fill-available;
+    padding: 15px 25px;
+    border-radius: 3px;
+    margin-bottom: 5px;
+    border: 0;
+    border: 2px solid #ccc;
+}
+textarea {
+    width: -webkit-fill-available;
+    height: 100px;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    resize: none;
+} 
+.submit-review{
+  border: none;
+  background-color:#4CB9FC;
+  color: white;
+  padding: 15px;
+  left:0;
+  cursor: pointer;
+  font-size: 1.5em;
+  letter-spacing: 1.4px; 
+  border-radius: 20px;
+}
 /*========Media Queries(Mobile First approach)============== */
 @media screen and (min-width:450px){
   .filter-options{
     flex-direction: row;
   }
+#add-review{
+  width: 90%;
+ }
+ form{
+  width: 90%;
+}
 
 }
 @media screen and (min-width:600px) and (max-width: 900px){
@@ -428,7 +482,11 @@ flex:0 0 29%;
   }
  #reviews-container{
   width: 50%;
- } 
+ }
+ #review-form{
+  height: 300px;
+}
+ 
 }
 @media screen and (min-width:1600px){
 #restaurants-list li {
