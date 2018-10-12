@@ -181,34 +181,30 @@ createRestaurantHTML = (restaurant) => {
   const name = document.createElement('h2');
   name.innerHTML = restaurant.name;
   li.append(name);
-  
   var isFavorite = (restaurant["is_favorite"] && restaurant["is_favorite"].toString() === "true") ? true : false;
   const favorite = document.createElement("button");
   favorite.setAttribute('role', 'switch');
+   favorite.setAttribute('aria-checked', isFavorite);
   favorite.id=`${restaurant.id}`;
   favorite.classList.add('heart');
   if (isFavorite){
     favorite.classList.add('favorite-checked');
     favorite.setAttribute('aria-label',`${restaurant.name} is a favorite restaurant`);
-    favorite.setAttribute('title',`Mark as not favorite`);
-  
   }else{
       favorite.setAttribute('aria-label',`${restaurant.name} is not a favorite restaurant`);
-      favorite.setAttribute('title',`Mark as favorite`);
   } 
   favorite.onclick = (e) => {
     DBHelper.markFavorite(restaurant);
     favorite.classList.toggle('favorite-checked');
     isFavorite=!isFavorite;
+     favorite.setAttribute('aria-checked', isFavorite);
     if (isFavorite){
     favorite.setAttribute('aria-label',`${restaurant.name} is a favorite restaurant`);
-      favorite.setAttribute('title',`Mark as not favorite`);
   }else{
       favorite.setAttribute('aria-label',`${restaurant.name} is not a favorite restaurant`);
-      favorite.setAttribute('title',`Mark as favorite`);
   }
   };
-  name.append(favorite);
+   name.append(favorite);
   const neighborhood = document.createElement('p');
   neighborhood.innerHTML = restaurant.neighborhood;
   li.append(neighborhood);

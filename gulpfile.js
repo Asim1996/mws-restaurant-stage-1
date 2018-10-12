@@ -31,6 +31,6 @@ gulp.task('minify-js', function () {
      suffix: ".min",
      extname: ".js"
      }))
-    .pipe(gulp.dest('dist'))
+    .pipe(gulp.dest('js'))
 });
 

@@ -17,7 +17,9 @@ class DBHelper {
     return `http://localhost:${port}/reviews`; 
   }
 
- 
+ static get dbPromise() {
+    return DBHelper.openDatabase();
+  }
   /*
     Initialising Database  
   */
@@ -351,9 +353,8 @@ static fetchfromDb(data) {
   }
 
   static markFavorite(restaurant) {
-    const dbPromise = DBHelper.openDatabase();
     if ('indexedDB' in window) {
-      dbPromise.then(db => {
+      this.dbPromise.then(db => {
         if (db) {
            this.handleFavoriteClick(db, restaurant);
         }
@@ -361,7 +362,6 @@ static fetchfromDb(data) {
     }
      this.FavouriteRestaurantNetwork(restaurant);
   }; 
-
   /**
    * Map marker for a restaurant.
    */
