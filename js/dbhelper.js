@@ -1,7 +1,7 @@
 /**
  * Common database helper functions.
  */
- 
+window.reviewsToBeSynced = [];
 class DBHelper {
 
     /*
@@ -183,6 +183,51 @@ static fetchfromDb(data) {
     }
 
   }
+
+   /**
+   * Update IndexedDB with latest review before going online.
+   */
+  static postReviewToDB(review) {
+    const dbPromise = DBHelper.openDatabase();
+
+    DBHelper.getReviewsFromDb(dbPromise, review.restaurant_id)
+      .then(reviews => {
+        if (!reviews) return;
+        reviews.push(review);
+        DBHelper.updateReviewsInDb(dbPromise, review.restaurant_id, reviews);
+
+        if (navigator.onLine) {
+          DBHelper.postReviewToServer(review);
+        } else {
+          window.reviewsToBeSynced.push(review);
+        }
+
+      });
+  }
+
+  /**
+   * Update server with latest review.
+   */
+  static postReviewToServer(review) {
+    const postReviewsUrl = `http://localhost:1337/reviews`;
+
+    const postReview = {
+      "restaurant_id": review.restaurant_id,
+      "name": review.name,
+      "rating": review.rating,
+      "comments": review.comments
+    };
+
+    return fetch(postReviewsUrl, {
+      method: 'POST',
+      body: JSON.stringify(postReview),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+  
+
   /**
    * Fetch restaurants by a cuisine type with proper error handling.
    */
@@ -271,6 +316,7 @@ static fetchfromDb(data) {
       }
     });
   }
+
 
   /**
    * Restaurant page URL.

@@ -1,6 +1,7 @@
 let restaurant;
 var newMap;
 let review;
+
 /*Service Worker Registration */
 if (navigator.serviceWorker) {
   navigator.serviceWorker
@@ -13,12 +14,16 @@ if (navigator.serviceWorker) {
     });
 }
 
-
 /**
  * Initialize map as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {  
   initMap();
+  const submitReview = document.querySelector('.submit-review');
+  submitReview.addEventListener('click', addReview);
+
+  window.addEventListener('online', isOnline);
+  window.addEventListener('offline', isOffline);
 });
 
 /**
@@ -217,6 +222,68 @@ createReviewHTML = (review) => {
 
   return li;
 }
+
+
+/**
+ * Add review entered by user.
+ */
+const addReview = (event) => {
+  const name = document.querySelector('.name');
+  const rating = document.querySelector('.rating');
+  const comments = document.querySelector('.comments');
+
+  const review = {
+    "restaurant_id": self.restaurant.id,
+    "name": name.value,
+    "rating": rating.value,
+    "comments": comments.value,
+    "createdAt": new Date().toISOString(),
+    "updatedAt": new Date().toISOString()
+  };
+  console.log("payload",review);
+  const ul = document.getElementById('reviews-list');
+  ul.appendChild(createReviewHTML(review));
+  DBHelper.postReviewToDB(review);
+  resetReviewForm(name, rating, comments);
+};
+
+/**
+ * Reset review form.
+ */
+const resetReviewForm = (name, rating, comments) => {
+  name.value = '';
+  rating.value = '';
+  comments.value = 'Enter Comments';
+};
+
+/**
+ * Sync reviews with server.
+ */
+const syncReviewsWithServer = () => {
+  Promise.all(window.reviewsToBeSynced.map(review => {
+    DBHelper.postReviewToServer(review);
+  })).then(_ => {
+    alert('Background Sync for reviews completed');
+    window.reviewsToBeSynced.length = 0;
+  }).catch(_ => {
+    window.reviewsToBeSynced.length = 0;
+  });
+};
+
+/**
+ * Alert when restaurant reviews page is online.
+ */
+const isOnline = (event) => {
+  alert('Application Is Now Online, Sync Will Continue.');
+  syncReviewsWithServer();
+};
+
+/**
+ * Alert when restaurant reviews page is offline.
+ */
+const isOffline = (event) => {
+  alert('Application Is Offline, Data will be saved for background sync ');
+};
 
 /**
  * Add restaurant name to the breadcrumb navigation menu
