@@ -78,7 +78,10 @@ debug: Port        : 1337
 
 ### Screenshots
 
-![Index Page](https://i.imgur.com/nGiAty7.jpg)
+![Index Page](https://i.imgur.com/q44zdJj.jpg)
 
+![Desktop View](https://i.imgur.com/yAFvbOo.jpg)
 
-![Restaurant Page](https://i.imgur.com/MkFx8E8.png)
+![Restaurant Page](https://i.imgur.com/AZUykds.jpg)
+
+![Landscape View](https://i.imgur.com/GSy1lwf.jpg)
