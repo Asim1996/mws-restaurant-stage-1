@@ -77,11 +77,14 @@ debug: Port        : 1337
 ![Lighthouse Score](https://i.imgur.com/0amsJSS.png)
 
 ### Screenshots
-
+###### Index Page
 ![Index Page](https://i.imgur.com/q44zdJj.jpg)
 
+###### Desktop View
 ![Desktop View](https://i.imgur.com/yAFvbOo.jpg)
 
+###### Restaurant Page
 ![Restaurant Page](https://i.imgur.com/AZUykds.jpg)
 
+###### Landscape View
 ![Landscape View](https://i.imgur.com/GSy1lwf.jpg)
