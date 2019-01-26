@@ -83,5 +83,4 @@ debug: Port        : 1337
 ![Desktop View](https://i.imgur.com/yAFvbOo.jpg)
 #### Restaurant Page
 ![Restaurant Page](https://i.imgur.com/AZUykds.jpg)
-#### Landscape View
 ![Landscape View](https://i.imgur.com/GSy1lwf.jpg)
